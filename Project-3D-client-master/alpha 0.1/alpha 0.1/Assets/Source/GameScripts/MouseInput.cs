@@ -54,23 +54,17 @@ public class MouseInput : MonoBehaviour
 
     void OnMouseUp()
     {
-
-        if (game.Grid[row, colom] == 0)
-        {
-            if (hitGrid)
-            {
+        game.PlaceObject(gameObject);
+        if (game.Grid[row, colom] == 0) {
+            if (hitGrid) {
                 transform.position = colPos;
                 hitGrid = false;
                 checkPos = false;
                 game.CheckPosition(row, colom, gameObject.transform.name);
-            }
-            else
-            {
+            } else {
                 gameObject.transform.position = storePos;
             }
-        }
-        else
-        {
+        } else {
             gameObject.transform.position = storePos;
         }
 

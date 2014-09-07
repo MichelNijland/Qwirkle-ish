@@ -10,7 +10,8 @@ public class Game : MonoBehaviour {
     private int gridWidth;
     private int gridHeight;
 
-    private string a;
+    private string state;
+    GameObject gridOb;
 
     
 
@@ -39,7 +40,7 @@ public class Game : MonoBehaviour {
             for (int x = 0; x < grid.GetLength(0); x++) {
                 grid[y,x] = 0;
                 GameObject gridBlock = Resources.Load("Prefabs/GamePrefabs/Grid")as GameObject;
-                GameObject gridOb = GameObject.Instantiate(gridBlock,new Vector3(x,y,0.1f),Quaternion.identity)as GameObject;
+                gridOb = GameObject.Instantiate(gridBlock,new Vector3(x,y,0.1f),Quaternion.identity)as GameObject;
                 gridOb.name = y + "" + x;
                 gridOb.transform.parent = board.transform;
                 
@@ -81,9 +82,12 @@ public class Game : MonoBehaviour {
 
     public void CheckPosition(int row, int colom, string objectName)
     {
+        
+        
         if (grid[row, colom] == 0)
-        {   
-            Debug.Log();
+        {
+            
+           
             if (objectName.Contains("Green"))
             {
                 Debug.Log("Green");
@@ -106,6 +110,13 @@ public class Game : MonoBehaviour {
         else
         {
             Debug.Log("Invalid move");
+        }
+    }
+
+    public void PlaceObject(GameObject ob) {
+        if (gridOb.transform.childCount == 0) {
+            ob.transform.parent = gridOb.transform;
+            
         }
     }
 
