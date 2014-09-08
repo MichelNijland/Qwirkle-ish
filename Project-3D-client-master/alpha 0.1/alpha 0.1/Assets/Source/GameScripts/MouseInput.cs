@@ -18,9 +18,12 @@ public class MouseInput : MonoBehaviour
 
     bool hitGrid = false;
     bool checkPos = true;
+    
 
     private int colom;
     private int row;
+    private GameObject gridBlock;
+
     
 
     Game game;
@@ -29,6 +32,7 @@ public class MouseInput : MonoBehaviour
 
     void Start()
     {
+        
         board = GameObject.Find("Board");
         game = GameObject.Find("Game Manager").GetComponent<Game>();
         
@@ -54,13 +58,18 @@ public class MouseInput : MonoBehaviour
 
     void OnMouseUp()
     {
-        game.PlaceObject(gameObject);
+        
         if (game.Grid[row, colom] == 0) {
             if (hitGrid) {
                 transform.position = colPos;
                 hitGrid = false;
                 checkPos = false;
-                game.CheckPosition(row, colom, gameObject.transform.name);
+                
+                GameObject grid = gridBlock;
+                game.CheckPosition(row, colom, gameObject.transform.name, gameObject, grid,storePos);
+                    //game.PlaceObject(gameObject, grid);
+                
+                
             } else {
                 gameObject.transform.position = storePos;
             }
@@ -79,6 +88,7 @@ public class MouseInput : MonoBehaviour
     {
         if (col.transform.parent == board.transform)
         {
+            gridBlock = col.gameObject;
             string obName = col.transform.name;
             row = int.Parse(obName.Substring(0, 1));
             colom = int.Parse(obName.Substring(1, 1));
