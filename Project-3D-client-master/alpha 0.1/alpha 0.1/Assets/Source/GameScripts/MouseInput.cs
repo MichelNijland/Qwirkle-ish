@@ -8,7 +8,6 @@ public class MouseInput : MonoBehaviour
     private Vector3 offset;
     private Vector3 storePos;
 
-
     private int boardHeight = 0;
     private int boardWidth = 0;
 
@@ -19,23 +18,16 @@ public class MouseInput : MonoBehaviour
     bool hitGrid = false;
     bool checkPos = true;
     
-
     private int colom;
     private int row;
     private GameObject gridBlock;
 
-    
-
     Game game;
-
     GameObject board;
 
-    void Start()
-    {
-        
+    void Start(){
         board = GameObject.Find("Board");
         game = GameObject.Find("Game Manager").GetComponent<Game>();
-        
     }
 
     void OnMouseDown()
@@ -47,41 +39,23 @@ public class MouseInput : MonoBehaviour
     }
     void OnMouseDrag()
     {
-
         Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
-
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
-
         transform.position = new Vector3(curPosition.x, curPosition.y, transform.position.z);
-
     }
 
     void OnMouseUp()
     {
-        
-        if (game.Grid[row, colom] == 0) {
-            if (hitGrid) {
-                transform.position = colPos;
-                hitGrid = false;
-                checkPos = false;
+        if (hitGrid) {
+            transform.position = colPos;
+            hitGrid = false;
+            checkPos = false;
                 
-                GameObject grid = gridBlock;
-                game.CheckPosition(row, colom, gameObject.transform.name, gameObject, grid,storePos);
-                    //game.PlaceObject(gameObject, grid);
-                
-                
-            } else {
-                gameObject.transform.position = storePos;
-            }
+            GameObject grid = gridBlock;
+            game.CheckPosition(row, colom, gameObject.transform.name, gameObject, grid,storePos);
         } else {
             gameObject.transform.position = storePos;
-        }
-
-        
-                
-                
-       
-            
+        }  
     }
 
     void OnTriggerEnter(Collider col)
@@ -101,9 +75,7 @@ public class MouseInput : MonoBehaviour
         {
             if (col.transform.parent == board.transform)
             {
-                
                 colPos = col.transform.position;
-
                 hitGrid = true;
             }
         }
@@ -111,18 +83,9 @@ public class MouseInput : MonoBehaviour
 
     void OnTriggerExit(Collider col)
     {
-        
         if (col.transform.parent == board.transform)
         {
-            
             colPos = storePos;
-            
         }
     }
-
-   
-
-    
-
-    
 }

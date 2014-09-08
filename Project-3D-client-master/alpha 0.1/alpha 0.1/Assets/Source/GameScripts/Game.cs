@@ -16,7 +16,8 @@ public class Game : MonoBehaviour {
     private string state;
     GameObject gridOb;
 
-    string[] color = new string[4] { "", "", "", "" };
+    string[] color = new string[6] { "", "", "", "","","" };
+    string[] shape = new string[6] { "", "", "", "","","" };
 
     Reposition repos = new Reposition();
     
@@ -29,15 +30,9 @@ public class Game : MonoBehaviour {
         createGrid();
         createObjects();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
-
-    private void createGrid() {
-
+    private void createGrid() 
+    {
         GameObject board = new GameObject("Board");
         gridWidth = 4;
         gridHeight = 4;
@@ -50,7 +45,6 @@ public class Game : MonoBehaviour {
                 gridOb.name = y + "" + x;
                 gridOb.transform.parent = board.transform;
                 gridPos.Add(gridOb);
-
             }
         }
     }
@@ -88,18 +82,11 @@ public class Game : MonoBehaviour {
 
     public void CheckPosition(int row, int colom, string objectName, GameObject ob, GameObject gridPos, Vector3 storePos)
     {
-        string color;
-        if (objectName.StartsWith("Green")){ color = "Green";}
-        else if (objectName.StartsWith("Yellow")) { color = "Yellow"; }
-        else if (objectName.StartsWith("Purple")) { color = "Purple"; }
-        else if (objectName.StartsWith("Red")) { color = "Red"; }
-        
-        checkColor(row,colom,objectName,ob,gridPos,storePos);
-
-
             if (grid[row, colom] == 0)
             {
                 grid[row, colom] = 1;
+                checkColor(row, colom, objectName, ob, gridPos, storePos);
+                checkShape(row, colom, objectName, ob, gridPos, storePos);
             }
             else
             {
@@ -108,7 +95,7 @@ public class Game : MonoBehaviour {
     }
 
     public void PlaceObject(GameObject ob, GameObject grid) {
-        if (grid.transform.childCount == 0 && ob.transform.parent != grid.transform)
+        if (grid.transform.childCount == 0)
         {
             ob.transform.parent = grid.transform;
         }
@@ -120,11 +107,11 @@ public class Game : MonoBehaviour {
         {
             if (grid[row, i] == 1 && objectName.Contains(color[row]))
             {
-                PlaceObject(ob, gridPos);
+                if (grid[row, colom] == 0) PlaceObject(ob, gridPos);
             }
             else if (grid[row, i] == 1 && !objectName.Contains(color[row]))
             {
-                Debug.Log("Wrong Position DUDE");
+                Debug.Log("Wrong Color Position DUDE");
                 ob.transform.position = storePos;
             }
             else if (grid[row, i] == 0 && color[row] == "")
@@ -136,7 +123,27 @@ public class Game : MonoBehaviour {
             }
         }
     }
-
-    
-
+    private void checkShape(int row, int colom, string objectName, GameObject ob, GameObject gridPos, Vector3 storePos)
+    {
+        for (int p = 0; p < grid.GetLength(1); p++)
+        {
+            if (grid[p,colom] == 1 && objectName.Contains(shape[colom]))
+            {
+                if (grid[row, colom] == 0) PlaceObject(ob, gridPos);
+                
+            }
+            else if (grid[p,colom] == 1 && !objectName.Contains(shape[colom]))
+            {
+                Debug.Log("Wrong Shape Position DUDE");
+                ob.transform.position = storePos;
+            }
+            else if (grid[p,colom] == 0 && shape[colom] == "")
+            {
+                if (objectName.Contains("Sphere")) { shape[colom] = "Sphere"; }
+                else if (objectName.Contains("Block")) { shape[colom] = "Block"; }
+                else if (objectName.Contains("Cylinder")) { shape[colom] = "Cylinder"; }
+                else if (objectName.Contains("Capsule")) { shape[colom] = "Capsule"; }
+            }
+        }
+    }
 }
